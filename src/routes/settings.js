@@ -1,5 +1,6 @@
 import security from '../lib/security';
 import SettingsService from '../services/settings/settings';
+import ImportSettingsService from '../services/settings/import';
 import EmailSettingsService from '../services/settings/email';
 import EmailTemplatesService from '../services/settings/emailTemplates';
 import CheckoutFieldsService from '../services/settings/checkoutFields';
@@ -20,6 +21,16 @@ class SettingsRoute {
 			'/v1/settings',
 			security.checkUserScope.bind(this, security.scope.WRITE_SETTINGS),
 			this.updateSettings.bind(this)
+		);
+		this.router.get(
+			'/v1/settings/import',
+			security.checkUserScope.bind(this, security.scope.READ_SETTINGS),
+			this.getImportSettings.bind(this)
+		);
+		this.router.put(
+			'/v1/settings/import',
+			security.checkUserScope.bind(this, security.scope.WRITE_SETTINGS),
+			this.updateImportSettings.bind(this)
 		);
 		this.router.get(
 			'/v1/settings/email',
@@ -70,9 +81,7 @@ class SettingsRoute {
 
 	getSettings(req, res, next) {
 		SettingsService.getSettings()
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -81,8 +90,27 @@ class SettingsRoute {
 			.then(data => {
 				if (data) {
 					return res.send(data);
+				}
+				return res.status(404).end();
+			})
+			.catch(next);
+	}
+
+	getImportSettings(req, res, next) {
+		ImportSettingsService.getImportSettings()
+			.then(data => {
+				res.send(data);
+			})
+			.catch(next);
+	}
+
+	updateImportSettings(req, res, next) {
+		ImportSettingsService.updateImportSettings(req.body)
+			.then(data => {
+				if (data) {
+					res.send(data);
 				} else {
-					return res.status(404).end();
+					res.status(404).end();
 				}
 			})
 			.catch(next);
@@ -90,9 +118,7 @@ class SettingsRoute {
 
 	getEmailSettings(req, res, next) {
 		EmailSettingsService.getEmailSettings()
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -101,18 +127,15 @@ class SettingsRoute {
 			.then(data => {
 				if (data) {
 					return res.send(data);
-				} else {
-					return res.status(404).end();
 				}
+				return res.status(404).end();
 			})
 			.catch(next);
 	}
 
 	getEmailTemplate(req, res, next) {
 		EmailTemplatesService.getEmailTemplate(req.params.name)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -121,26 +144,21 @@ class SettingsRoute {
 			.then(data => {
 				if (data) {
 					return res.send(data);
-				} else {
-					return res.status(404).end();
 				}
+				return res.status(404).end();
 			})
 			.catch(next);
 	}
 
 	getCheckoutFields(req, res, next) {
 		CheckoutFieldsService.getCheckoutFields()
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
 	getCheckoutField(req, res, next) {
 		CheckoutFieldsService.getCheckoutField(req.params.name)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -149,9 +167,8 @@ class SettingsRoute {
 			.then(data => {
 				if (data) {
 					return res.send(data);
-				} else {
-					return res.status(404).end();
 				}
+				return res.status(404).end();
 			})
 			.catch(next);
 	}
@@ -162,9 +179,7 @@ class SettingsRoute {
 
 	deleteLogo(req, res, next) {
 		SettingsService.deleteLogo()
-			.then(() => {
-				return res.end();
-			})
+			.then(() => res.end())
 			.catch(next);
 	}
 }

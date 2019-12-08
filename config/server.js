@@ -1,7 +1,7 @@
 // config used by server side only
 const dbHost = process.env.DB_HOST || '127.0.0.1';
 const dbPort = process.env.DB_PORT || 27017;
-const dbName = process.env.DB_NAME || 'shop';
+const dbName = process.env.DB_NAME || 'import-test';
 const dbUser = process.env.DB_USER || '';
 const dbPass = process.env.DB_PASS || '';
 const dbCred =
@@ -21,13 +21,24 @@ module.exports = {
 	adminBaseURL: process.env.ADMIN_BASE_URL || 'http://localhost:3002',
 	adminLoginPath: process.env.ADMIN_LOGIN_PATH || '/login',
 
-	// used by API to service assets
-	assetsBaseURL: process.env.ASSETS_BASE_URL || 'http://localhost:3001',
-
 	apiListenPort: process.env.API_PORT || 3001,
 
 	// used by API
 	mongodbServerUrl: dbUrl,
+
+	// assest
+	assetServer: {
+		type: process.env.ASSETS_TYPE || 'local', // 'local' | 's3'
+		domain: process.env.ASSETS_BASE_URL || 'http://localhost:3001', // add localBasePath to S3 domain
+		localBasePath: 'public/content',
+		categoriesUploadPath: 'images/categories',
+		productsUploadPath: 'images/products',
+		themeImageUploadPath: 'assets/images',
+		filesUploadPath: 'assets',
+
+		// S3 Config
+		bucket: 'cezerin2-asset-test'
+	},
 
 	// smpt server parameters
 	smtpServer: {
@@ -45,18 +56,6 @@ module.exports = {
 
 	// key to sign store cookies
 	cookieSecretKey: process.env.COOKIE_SECRET_KEY || '-',
-
-	// path to uploads
-	categoriesUploadPath: 'public/content/images/categories',
-	productsUploadPath: 'public/content/images/products',
-	filesUploadPath: 'public/content',
-	themeAssetsUploadPath: 'theme/assets/images',
-
-	// url to uploads
-	categoriesUploadUrl: '/images/categories',
-	productsUploadUrl: '/images/products',
-	filesUploadUrl: '',
-	themeAssetsUploadUrl: '/assets/images',
 
 	// store UI language
 	language: process.env.LANGUAGE || 'en',

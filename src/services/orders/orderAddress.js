@@ -1,7 +1,5 @@
 import { ObjectID } from 'mongodb';
-import settings from '../../lib/settings';
 import { db } from '../../lib/mongo';
-import utils from '../../lib/utils';
 import parse from '../../lib/parse';
 import OrdersService from './orders';
 
@@ -56,7 +54,7 @@ class OrderAddressService {
 			return new Error('Required fields are missing');
 		}
 
-		let address = {};
+		const address = {};
 
 		keys.forEach(key => {
 			const value = data[key];

@@ -1,7 +1,5 @@
 import { ObjectID } from 'mongodb';
-import settings from '../../lib/settings';
 import { db } from '../../lib/mongo';
-import utils from '../../lib/utils';
 import parse from '../../lib/parse';
 import OrdersService from './orders';
 
@@ -10,7 +8,7 @@ class OrdertDiscountsService {
 		if (!ObjectID.isValid(order_id)) {
 			return Promise.reject('Invalid identifier');
 		}
-		let orderObjectID = new ObjectID(order_id);
+		const orderObjectID = new ObjectID(order_id);
 		const discount = this.getValidDocumentForInsert(data);
 
 		return db.collection('orders').updateOne(
@@ -29,8 +27,8 @@ class OrdertDiscountsService {
 		if (!ObjectID.isValid(order_id) || !ObjectID.isValid(discount_id)) {
 			return Promise.reject('Invalid identifier');
 		}
-		let orderObjectID = new ObjectID(order_id);
-		let discountObjectID = new ObjectID(discount_id);
+		const orderObjectID = new ObjectID(order_id);
+		const discountObjectID = new ObjectID(discount_id);
 		const discount = this.getValidDocumentForUpdate(data);
 
 		return db
@@ -49,8 +47,8 @@ class OrdertDiscountsService {
 		if (!ObjectID.isValid(order_id) || !ObjectID.isValid(discount_id)) {
 			return Promise.reject('Invalid identifier');
 		}
-		let orderObjectID = new ObjectID(order_id);
-		let discountObjectID = new ObjectID(discount_id);
+		const orderObjectID = new ObjectID(order_id);
+		const discountObjectID = new ObjectID(discount_id);
 
 		return db
 			.collection('orders')
@@ -82,7 +80,7 @@ class OrdertDiscountsService {
 			return new Error('Required fields are missing');
 		}
 
-		let discount = {};
+		const discount = {};
 
 		if (data.variant_id !== undefined) {
 			discount['discounts.$.name'] = parse.getString(data.name);
